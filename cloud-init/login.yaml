@@ -1,0 +1,89 @@
+packages:
+  - ipa-client
+  - nfs-utils
+  - python36
+
+runcmd:
+  # rsyslog
+  - sed -i 's/^#\*.\* @@remote-host:514/\*.\* @@mgmt01:514/g' /etc/rsyslog.conf
+  - systemctl restart rsyslog
+  # NFS
+  - setsebool -P use_nfs_home_dirs 1
+  - mkdir -p /project /scratch
+  - echo "mgmt01:/home      /home      nfs rw,noatime,nolock,hard,tcp 0 0" >> /etc/fstab
+  - echo "mgmt01:/project   /project   nfs rw,noatime,nolock,hard,tcp 0 0" >> /etc/fstab
+  - echo "mgmt01:/scratch   /scratch   nfs rw,noatime,nolock,hard,tcp 0 0" >> /etc/fstab
+  - echo "mgmt01:/etc/slurm /etc/slurm nfs rw,noatime,nolock,hard,tcp 0 0" >> /etc/fstab
+  - mount -a
+  # CVMFS
+  - yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-2-6.noarch.rpm 
+  - yum install -y https://package.computecanada.ca/yum/cc-cvmfs-public/Packages/computecanada-release-1.0-1.noarch.rpm
+  - yum install -y cvmfs cvmfs-config-computecanada cvmfs-config-default cvmfs-auto-setup
+
+write_files:
+  - path: /etc/cvmfs/config.d/ref.mugqic.conf
+    content: |
+      CVMFS_SERVER_URL="http://cvmfs-s0-genomic.vhost38.genap.ca/cvmfs/@fqrn@"
+      CVMFS_KEYS_DIR="/cvmfs/cvmfs-config.computecanada.ca/etc/cvmfs/keys/mugqic"
+      CVMFS_HTTP_PROXY="DIRECT"
+  - path: /etc/cvmfs/config.d/soft.mugqic.conf
+    content: |
+      CVMFS_SERVER_URL="http://cvmfs-s0-genomic.vhost38.genap.ca/cvmfs/@fqrn@"
+      CVMFS_KEYS_DIR=/cvmfs/cvmfs-config.computecanada.ca/etc/cvmfs/keys/mugqic
+      CVMFS_HTTP_PROXY=DIRECT
+  - path: /etc/profile.d/z-01-genpipes.sh
+    content: |
+      if [[ $UID -gt 10000 ]]; then
+        export MUGQIC_INSTALL_HOME=/cvmfs/soft.mugqic/CentOS6
+        echo -e "\nWait while Genpipes module are loaded. This could take a while,"
+        echo -e   "  especially if the cvmfs cache is new\n"
+        module use $MUGQIC_INSTALL_HOME/modulefiles
+        module load mugqic/python/2.7.14
+        module load mugqic/genpipes
+      fi
+  - content: |
+        if [[ $UID -gt 10000 ]]; then
+          if [[ -r /cvmfs/soft.computecanada.ca/config/profile/bash.sh ]]; then
+            source /cvmfs/soft.computecanada.ca/config/profile/bash.sh
+          fi
+        fi
+    path: /etc/profile.d/z-00-computecanada.sh
+  - path: /root/freeipa.sh
+    permissions: 0700
+    content: |
+        #!/bin/bash
+        systemctl is-active --quiet NetworkManager
+        IS_RUNNING=$?
+        if [ $IS_RUNNING -eq 0 ]; then
+            systemctl stop NetworkManager
+        fi
+        hostnamectl set-hostname ${hostname}.${domain_name}
+        sed -i "/nameserver/c\nameserver ${mgmt01_ip}" /etc/resolv.conf
+        sed -i "/search/c\search ${domain_name}" /etc/resolv.conf
+        chattr +i /etc/resolv.conf
+        if [ $IS_RUNNING -eq 0 ]; then
+            systemctl start NetworkManager
+        fi
+        until ping -c1 mgmt01 &>/dev/null; do :; done
+        sleep 30
+        ipa-client-install --mkhomedir --ssh-trust-dns \
+                           --enable-dns-updates \
+                           --unattended -p admin \
+                           -w ${admin_passwd}
+  - path: /etc/cvmfs/default.local
+    content: |
+        CVMFS_REPOSITORIES="cvmfs-config.computecanada.ca,soft.computecanada.ca"
+        CVMFS_QUOTA_LIMIT=4450
+        CVMFS_HTTP_PROXY="http://mgmt01:3128"
+  - path: /root/login.te
+    content: |
+        module login 1.0;
+
+        require {
+          type unconfined_t;
+          type unconfined_service_t;
+          class process transition;
+        }
+
+        allow unconfined_service_t unconfined_t:process transition;
+    permissions: 0600

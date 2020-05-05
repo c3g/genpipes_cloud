@@ -1,0 +1,8 @@
+os_venv/*
+.terraform
+*/.terraform
+*.tfstate*
+*-openrc.sh
+venv
+*/venv
+*.tar.*
