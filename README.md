@@ -43,9 +43,10 @@ $ curl ifconfig.co
 <my current ip>
 
 ~~~
-then in the main.tf change `fw_ssh_filter = "<my current ip>"`
-
-It also accept range in the following form `XXX.XXX.XXX.XXX/XX`
+then in the main.tf change `fw_ssh_filter = "<my current ip>/32"`. Like this
+you will be the only one able to login to your cluster. Of course other filters
+could be selected. To open you cluster to any IP, use  
+`fw_ssh_filter = "0.0.0.0/0"`
 
 5. Create an ssh key for that cluster
 

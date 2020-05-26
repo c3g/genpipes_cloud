@@ -49,20 +49,6 @@ resource "openstack_compute_secgroup_v2" "secgroup_1" {
     ip_protocol = "tcp"
     cidr        = "${var.fw_ssh_filter}"
   }
-
-  rule {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr        = "0.0.0.0/0"
-  }
-
-  rule {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr        = "0.0.0.0/0"
-  }
 }
 
 resource "openstack_compute_keypair_v2" "keypair" {
@@ -95,7 +81,7 @@ resource "openstack_compute_instance_v2" "mgmt01" {
 resource "openstack_compute_volume_attach_v2" "va_1" {
   instance_id = "${openstack_compute_instance_v2.mgmt01.id}"
   volume_id   = "${openstack_blockstorage_volume_v3.shared_volume_1.id}"
-  device      = "/dev/vdb" 
+  device      = "/dev/vdb"
 }
 
 locals {
