@@ -1,20 +1,27 @@
 module "openstack" {
-  source = "git::ssh://gitlab@git.computecanada.ca/fafor10/slurm_cloud.git//openstack"
+  source = "git::ssh://git@github.com:c3g/genpipes_cloud.git//openstack"
 
-  # JupyterHub + Slurm definition
-  cluster_name        = "phoenix"
-  nb_nodes            = 5
-  nb_users            = 10
-  shared_storage_size = 100
-  domain_name         = "jupyter2.calculquebec.cloud"
-  public_key_path     = "./key.pub"
+
+  # Slurm definition
+  cluster_name        = "workshop_km"
+  nb_nodes            = 7
+  nb_users            = 50
+  domain_name         = "brune" 
+  shared_storage_size = 1000
+  public_key_path     = "./cloud.pub"
+
+  
+  # ssh firewall allowed, comma separated
+  #fw_ssh_filter = ["96.22.0.0/16","132.106.0.0/16"]
+  fw_ssh_filter = "142.0.0.0/24"
+  
 
   # OpenStack specifics
-  os_external_network = "net04_ext"
-  os_image_id         = "357d4c60-6ead-4d3a-9d4e-20b375e13011"
-  os_flavor_node      = "p2-3gb"
+  os_external_network = "external-network"
+  os_image_id         = "7437fe81-af5d-490c-b29d-7a29f3244bfd"
+  os_flavor_node      = "c8-40gb-180"
   os_flavor_login     = "p2-3gb"
-  os_flavor_mgmt      = "p2-3gb"
+  os_flavor_mgmt      = "p8-12gb"
 }
 
 output "public_ip" {
