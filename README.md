@@ -22,16 +22,19 @@ Install [Terraform](https://www.terraform.io/downloads.html)
  source ./<MyProject>.openrc.sh
 ~~~
 
-4. Create a new folder : `mkdir my_deploying_folder && WORKDIR=my_deploying_folder`.
+4. Create a new folder : `mkdir my_deploying_folder && WORKDIR=~/${PWD}/my_deploying_folder`.
 
-5. Copy an example `main.tf` from the [openstack example folder](./examples/openstack/main.tf)
+5. Copy the `main.tf` file from the [openstack example folder](./examples/openstack/main.tf)
+~~~
+cp genpipes_cloud ${WORKDIR}
+~~~
 
 4. Set the value in the file
 Give a telling name to your cluster
 
 ~~~
-cluster_name        = "funky_one"
 ~~~
+cluster_name        = "funky_one"
 
 Set the firewall white list rule. You can restrict it to you current IP address for development purpose. Get your current address wit curl:
 
@@ -40,10 +43,9 @@ $ curl ifconfig.co
 <my current ip>
 
 ~~~
-`fw_ssh_filter = "<my current ip>``
+then in the main.tf change `fw_ssh_filter = "<my current ip>"`
 
-It also accept range in the following form `132.216.0.0/16`
-
+It also accept range in the following form `XXX.XXX.XXX.XXX/XX`
 
 5. Create an ssh key for that cluster
 
