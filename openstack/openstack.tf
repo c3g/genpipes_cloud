@@ -5,3 +5,5 @@ variable "os_flavor_mgmt" {}
 variable "os_external_network" {}
 
 variable "os_image_id" {}
+
+variable "home_fs_size" {}

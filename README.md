@@ -8,6 +8,8 @@ This is an early fork of the [Compute Canada Magic Castle project] (https://gith
 
 Install [Terraform](https://www.terraform.io/downloads.html)
 
+The current deployement as been tested on terraform 11.11, it will crash with 12.XX
+
 ## OpenStack
 
 1. Clone this repo
@@ -30,13 +32,15 @@ cp genpipes_cloud ${WORKDIR}
 ~~~
 
 4. Set the value in the file
+
 Give a telling name to your cluster
 
 ~~~
 ~~~
 cluster_name        = "funky_one"
 
-Set the firewall white list rule. You can restrict it to you current IP address for development purpose. Get your current address wit curl:
+Set the firewall white list rule. You can restrict it to you current IP address
+ for development purpose. Get your current address wit curl:
 
 ~~~
 $ curl ifconfig.co

@@ -7,8 +7,8 @@ module "openstack" {
   nb_nodes            = 3
   nb_users            = 10
   domain_name         = "brune"
-  shared_storage_size = 5
-  home_fs_size        = 30
+  shared_storage_size = 30
+  home_fs_size        = 5
   public_key_path     = "./cloud.pub"
 
 
