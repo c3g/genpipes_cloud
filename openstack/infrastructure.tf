@@ -71,7 +71,7 @@ resource "openstack_compute_instance_v2" "mgmt01" {
   block_device {
     uuid                  = "${var.os_image_id}"
     source_type           = "image"
-    volume_size           = 100
+    volume_size           = "${var.home_fs_size}"
     boot_index            = 0
     destination_type      = "volume"
     delete_on_termination = true

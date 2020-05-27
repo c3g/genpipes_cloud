@@ -5,15 +5,16 @@ module "openstack" {
   # Slurm definition
   cluster_name        = "workshop_km"
   nb_nodes            = 3
-  nb_users            = 50
-  domain_name         = "brune" 
-  shared_storage_size = 100
+  nb_users            = 10
+  domain_name         = "brune"
+  shared_storage_size = 5
+  home_fs_size        = 30
   public_key_path     = "./cloud.pub"
 
-  
+
   # ssh firewall allowed, comma separated
   fw_ssh_filter = "0.0.0.0/0" # get with curl ifconfig.co
-  
+
 
   # OpenStack specifics
   os_external_network = "net04_ext"
