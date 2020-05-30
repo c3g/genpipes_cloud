@@ -1,9 +1,18 @@
-variable "os_flavor_node" {}
-variable "os_flavor_login" {}
-variable "os_flavor_mgmt" {}
+variable "os_flavor_node" {
+}
 
-variable "os_external_network" {}
+variable "os_flavor_login" {
+}
 
-variable "os_image_id" {}
+variable "os_flavor_mgmt" {
+}
 
-variable "home_fs_size" {}
+variable "os_external_network" {
+}
+
+variable "os_image_id" {
+}
+
+variable "home_fs_size" {
+}
+
