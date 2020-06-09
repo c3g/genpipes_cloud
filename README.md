@@ -80,10 +80,12 @@ public_ip = <login node ip>
 Genpipes takes about 20 minutes to setup, but you can login to the cluster right away.
 Has the admin user, with your rsa key:
 ~~~
-ssh centos@<login node ip>
+ssh -A centos@<login node ip>
 ~~~
 
-or as user1 with the guest_passwd
+Note that `-A` option enables forwarding of the authentication agent connection  to the login node and will let you log to the other node of the cluster.
+
+You can also log as user1 with the guest_passwd
 
 ~~~
 ssh user1@<login node ip>
