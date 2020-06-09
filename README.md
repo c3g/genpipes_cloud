@@ -1,4 +1,4 @@
-# Terraform for GenPipes on the Cloud
+# Terraform for GenPipes
 
 This is an early fork of the [Compute Canada Magic Castle project] (https://github.com/ComputeCanada/magic_castle) it is modified so it install the GenPipes software stack instead of the Compute Canada one. The fork was done at the time when magic_castle was still using its cloud init recipes. We are actively migrating it to use puppet modules.
 

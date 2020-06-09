@@ -1,13 +1,21 @@
-variable "cluster_name" {}
+variable "cluster_name" {
+}
 
-variable "nb_nodes" {}
+variable "nb_nodes" {
+}
 
-variable "nb_users" {}
+variable "nb_users" {
+}
 
-variable "shared_storage_size" {}
+variable "shared_storage_size" {
+}
 
-variable "domain_name" {}
+variable "domain_name" {
+}
 
-variable "public_key_path" {}
+variable "public_key_path" {
+}
 
-variable "fw_ssh_filter" {}
+variable "fw_ssh_filter" {
+}
+
