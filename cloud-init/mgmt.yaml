@@ -1,7 +1,7 @@
 yum_repos:
     zfs-kmod:
         name: ZFS on Linux for EL7 - kmod
-        baseurl: http://download.zfsonlinux.org/epel/7.6/kmod/$basearch/
+        baseurl: http://download.zfsonlinux.org/epel/7.8/kmod/$basearch/
         enabled: true
         metadata_expire: 7d
         gpgcheck: false

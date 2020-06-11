@@ -45,11 +45,14 @@ resource "openstack_compute_secgroup_v2" "secgroup_1" {
     self        = true
   }
 
-  rule {
-    from_port   = 22
-    to_port     = 22
-    ip_protocol = "tcp"
-    cidr        = var.fw_ssh_filter
+  dynamic "rule" {
+    for_each = var.fw_ssh_filter
+    content {
+      from_port   = 22
+      to_port     = 22
+      ip_protocol = "tcp"
+      cidr        = rule.value
+    }
   }
 }
 

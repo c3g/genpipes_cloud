@@ -1,14 +1,16 @@
 # Terraform for GenPipes
 
-This is an early fork of the [Compute Canada Magic Castle project] (https://github.com/ComputeCanada/magic_castle) it is modified so it install the GenPipes software stack instead of the Compute Canada one. The fork was done at the time when magic_castle was still using its cloud init recipes. We are actively migrating it to use puppet modules.
-
+This is an early fork of the [Compute Canada Magic Castle project](https://github.com/ComputeCanada/magic_castle)
+it is modified so it install the GenPipes software stack instead of the Compute Canada one.
+The fork was done at the time when magic_castle was still using its cloud init recipes.
+We are actively migrating it to use puppet modules.
 
 
 ## Local Setup
 
 Install [Terraform](https://www.terraform.io/downloads.html)
 
-The current deployement as been tested on terraform 11.11, it will crash with 12.XX
+The current deployement as been tested on Terraform v0.12.26
 
 ## OpenStack
 
@@ -36,8 +38,8 @@ cp genpipes_cloud ${WORKDIR}
 Give a telling name to your cluster
 
 ~~~
-~~~
 cluster_name        = "funky_one"
+~~~
 
 Set the firewall white list rule. You can restrict it to you current IP address
  for development purpose. Get your current address wit curl:
@@ -47,10 +49,10 @@ $ curl ifconfig.co
 <my current ip>
 
 ~~~
-then in the main.tf change `fw_ssh_filter = "<my current ip>/32"`. Like this
+then in the main.tf change `fw_ssh_filter = ["<my current ip>/32","<another allowed ip>/32"]`. Like this
 you will be the only one able to login to your cluster. Of course other filters
 could be selected. To open you cluster to any IP, use  
-`fw_ssh_filter = "0.0.0.0/0"`
+`fw_ssh_filter = ["0.0.0.0/0"]`
 
 5. Create an ssh key for that cluster
 
